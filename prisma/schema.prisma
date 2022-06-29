@@ -1,19 +1,24 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-generator client {
-  provider = "prisma-client-js"
-}
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model Rounds {
-  id         Int  @id @default(autoincrement())
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id    Int           @id @default(autoincrement())
+  name  String
+}
+
+model Round {
+  id         Int      @id @default(autoincrement())
   name       String
   project    String
-  startedAt  DateTime @default(now()) @db.Timestamp(6)
+  startedAt  DateTime @default(now())
   finishedAt DateTime
 }
