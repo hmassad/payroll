@@ -14,7 +14,8 @@ const handler = async (req, res) => {
       console.log("created round", newRound);
       res.status(200).json({message: "iniciado"});
     } catch (error) {
-      res.status(404);
+      console.error(error);
+      res.status(500).json({error});
     }
   } else if (req.method === "GET") {
     return "Hello";
