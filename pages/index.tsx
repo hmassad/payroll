@@ -1,21 +1,26 @@
 import { prisma } from "../lib/prisma";
 import Layout from "../components/Layout";
 
+import classes from "../styles/Home.module.css";
+
 const Index = ({ rounds }) => {
   const handleClick = (e, round) => {
     e.preventDefault();
     fetch(`/api/projects/${round.project}/rounds`, {
       method: "POST",
-      body: JSON.stringify({ userId: round.userId })
+      headers: {
+        "content-type": "application/json"
+      },
+      body: JSON.stringify({ project: round.project })
     });
   };
   return (
     <Layout>
-      <div className="page">
-        <h1>Public Feed</h1>
+      <div className={classes.main}>
+        <h1 className={classes.title}>Public Feed</h1>
         <main>
           {rounds.map(round => (
-            <div key={round.id} className="post">
+            <div key={round.id} className={classes.card}>
               <ul>
                 <li>{round.user.name}</li>
                 <li>{round.project}</li>
@@ -28,18 +33,6 @@ const Index = ({ rounds }) => {
           ))}
         </main>
       </div>
-      <style jsx>{`
-        .post {
-          background: white;
-          transition: box-shadow 0.1s ease-in;
-        }
-        .post:hover {
-          box-shadow: 1px 1px 3px #aaa;
-        }
-        .post + .post {
-          margin-top: 2rem;
-        }
-      `}</style>
     </Layout>
   );
 };
