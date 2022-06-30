@@ -2,8 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
@@ -12,18 +12,18 @@ generator client {
 }
 
 model Account {
-  id                 Int         @id @default(autoincrement())
-  userId             Int
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?    @db.Text
-  access_token       String?    @db.Text
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?    @db.Text
-  session_state      String?
+  id                Int     @id @default(autoincrement())
+  userId            Int
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -31,17 +31,17 @@ model Account {
 }
 
 model Session {
-  id           Int          @id @default(autoincrement())
-  sessionToken String       @unique
+  id           Int      @id @default(autoincrement())
+  sessionToken String   @unique
   userId       Int
   expires      DateTime
-  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model User {
-  id            Int         @id @default(autoincrement())
+  id            Int       @id @default(autoincrement())
   name          String?
-  email         String?     @unique
+  email         String?   @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
@@ -51,17 +51,17 @@ model User {
 
 model VerificationToken {
   identifier String
-  token      String         @unique
+  token      String   @unique
   expires    DateTime
 
   @@unique([identifier, token])
 }
 
 model Round {
-  id         Int            @id @default(autoincrement())
-  user       User           @relation(fields:[userId], references:[id])
+  id         Int       @id @default(autoincrement())
+  user       User      @relation(fields: [userId], references: [id])
   userId     Int
   project    String
-  startedAt  DateTime       @default(now())
-  finishedAt DateTime
+  startedAt  DateTime  @default(now())
+  finishedAt DateTime?
 }

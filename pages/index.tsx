@@ -1,9 +1,11 @@
-import { prisma } from "../lib/prisma";
+import prisma from "../lib/prisma";
 import Layout from "../components/Layout";
-
 import classes from "../styles/Home.module.css";
 
-const Index = ({ rounds }) => {
+const Index = ({rounds}) => {
+
+  // console.debug({rounds})
+
   const handleClick = (e, round) => {
     e.preventDefault();
     fetch(`/api/projects/${round.project}/rounds`, {
@@ -11,7 +13,7 @@ const Index = ({ rounds }) => {
       headers: {
         "content-type": "application/json"
       },
-      body: JSON.stringify({ project: round.project })
+      body: JSON.stringify({project: round.project})
     });
   };
   return (
@@ -24,7 +26,8 @@ const Index = ({ rounds }) => {
               <ul>
                 <li>{round.user.name}</li>
                 <li>{round.project}</li>
-                {/* <li>{round.finishedAt}</li> */}
+                <li>{round.startedAt.toLocaleString()}</li>
+                <li>{round.finishedAt}</li>
               </ul>
               <button onClick={e => handleClick(e, round)} type="button">
                 Crear Round
@@ -53,9 +56,14 @@ export const getServerSideProps = async () => {
       finishedAt: true
     }
   });
+
   return {
     props: {
-      rounds
+      rounds: rounds.map(r => ({
+        ...r,
+        startedAt: r.startedAt?.toISOString(),
+        finishedAt: r.finishedAt?.toISOString(),
+      })),
     }
   };
 };

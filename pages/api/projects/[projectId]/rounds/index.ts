@@ -1,20 +1,18 @@
-import { prisma } from "../../../../../lib/prisma";
+import prisma from "../../../../../lib/prisma";
 
 const handler = async (req, res) => {
   if (req.method === "POST") {
-    const startedAt = new Date();
-    const payload = req.body;
+    const payload = req.body as any;
     try {
-      await prisma.round.create({
+      const newRound = await prisma.round.create({
         data: {
-          startedAt: startedAt,
+          startedAt: new Date(),
+          project: payload.project,
           userId: payload.userId,
-          project: String(payload.project)
-        }
+        },
       });
-      console.log(payload.project, startedAt);
-
-      res.status(200).json({ message: "iniciado" });
+      console.log("created round", newRound);
+      res.status(200).json({message: "iniciado"});
     } catch (error) {
       res.status(404);
     }
