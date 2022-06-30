@@ -2,6 +2,13 @@ import { prisma } from "../lib/prisma";
 import Layout from "../components/Layout";
 
 const Index = ({ rounds }) => {
+  const handleClick = (e, round) => {
+    e.preventDefault();
+    fetch(`/api/projects/${round.project}/rounds`, {
+      method: "POST",
+      body: JSON.stringify({ userId: round.userId })
+    });
+  };
   return (
     <Layout>
       <div className="page">
@@ -9,8 +16,14 @@ const Index = ({ rounds }) => {
         <main>
           {rounds.map(round => (
             <div key={round.id} className="post">
-              {round.name}
-              {round.project}
+              <ul>
+                <li>{round.user.name}</li>
+                <li>{round.project}</li>
+                {/* <li>{round.finishedAt}</li> */}
+              </ul>
+              <button onClick={e => handleClick(e, round)} type="button">
+                Crear Round
+              </button>
             </div>
           ))}
         </main>
@@ -37,8 +50,14 @@ export const getServerSideProps = async () => {
   const rounds = await prisma.round.findMany({
     select: {
       id: true,
-      name: true,
-      project: true
+      user: {
+        select: {
+          name: true
+        }
+      },
+      project: true,
+      startedAt: true,
+      finishedAt: true
     }
   });
   return {
