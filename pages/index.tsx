@@ -1,9 +1,8 @@
 import prisma from "../lib/prisma";
 import Layout from "../components/Layout";
-import classes from "../styles/Home.module.css";
+import Button from "../components/Button";
 
-const Index = ({rounds}) => {
-
+const Index = ({ rounds }) => {
   // console.debug({rounds})
 
   const handleClick = (e, round) => {
@@ -13,25 +12,32 @@ const Index = ({rounds}) => {
       headers: {
         "content-type": "application/json"
       },
-      body: JSON.stringify({project: round.project})
+      body: JSON.stringify({
+        project: round.project,
+        userId: round.userId,
+        roundId: round.id
+      })
     });
   };
   return (
     <Layout>
-      <div className={classes.main}>
-        <h1 className={classes.title}>Public Feed</h1>
+      <div>
+        <h1 className="text-3xl font-bold underline">Public Feed</h1>
         <main>
           {rounds.map(round => (
-            <div key={round.id} className={classes.card}>
+            <div
+              key={round.id}
+              className="px-6 py-4 max-w-sm rounded overflow-hidden shadow-lg"
+            >
               <ul>
                 <li>{round.user.name}</li>
                 <li>{round.project}</li>
                 <li>{round.startedAt.toLocaleString()}</li>
-                <li>{round.finishedAt}</li>
+                <li>{round.finishedAt !== new Date(0) && round.finishedAt}</li>
               </ul>
-              <button onClick={e => handleClick(e, round)} type="button">
-                Crear Round
-              </button>
+              <Button onClick={e => handleClick(e, round)} type="button">
+                "Crear Round"
+              </Button>
             </div>
           ))}
         </main>
@@ -51,6 +57,7 @@ export const getServerSideProps = async () => {
           name: true
         }
       },
+      userId: true,
       project: true,
       startedAt: true,
       finishedAt: true
@@ -62,8 +69,8 @@ export const getServerSideProps = async () => {
       rounds: rounds.map(r => ({
         ...r,
         startedAt: r.startedAt?.toISOString(),
-        finishedAt: r.finishedAt?.toISOString(),
-      })),
+        finishedAt: r.finishedAt?.toISOString()
+      }))
     }
   };
 };
