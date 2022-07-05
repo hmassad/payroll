@@ -1,11 +1,12 @@
 import prisma from "../lib/prisma";
 import Layout from "../components/Layout";
 import Button from "../components/Button";
+import moment from "moment";
 
 const Index = ({ rounds }) => {
   // console.debug({rounds})
 
-  const handleClick = (e, round) => {
+  const handleCreateRound = (e, round) => {
     e.preventDefault();
     fetch(`/api/projects/${round.project}/rounds`, {
       method: "POST",
@@ -15,6 +16,19 @@ const Index = ({ rounds }) => {
       body: JSON.stringify({
         project: round.project,
         userId: round.userId,
+        roundId: round.id
+      })
+    });
+  };
+
+  const handleCloseRound = (e, round) => {
+    e.preventDefault();
+    fetch(`/api/projects/${round.project}/rounds`, {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json"
+      },
+      body: JSON.stringify({
         roundId: round.id
       })
     });
@@ -33,11 +47,23 @@ const Index = ({ rounds }) => {
                 <li>{round.user.name}</li>
                 <li>{round.project}</li>
                 <li>{round.startedAt.toLocaleString()}</li>
-                <li>{round.finishedAt !== new Date(0) && round.finishedAt}</li>
+                <li>
+                  {moment(round.finishedAt) > moment(new Date(0)) &&
+                    round.finishedAt}
+                </li>
               </ul>
-              <Button onClick={e => handleClick(e, round)} type="button">
-                "Crear Round"
-              </Button>
+              {moment(round.finishedAt) > moment(new Date(0)) ? (
+                <Button
+                  onClick={e => handleCreateRound(e, round)}
+                  type="button"
+                >
+                  "Crear Round"
+                </Button>
+              ) : (
+                <Button onClick={e => handleCloseRound(e, round)} type="button">
+                  "Cerrar Round"
+                </Button>
+              )}
             </div>
           ))}
         </main>

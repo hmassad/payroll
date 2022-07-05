@@ -21,6 +21,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   } else if (req.method === "PUT") {
     try {
       const payload = req.body as any;
+      console.log(payload.roundId);
       const closeRound = await prisma.round.update({
         where: {
           id: payload.roundId
@@ -29,7 +30,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           finishedAt: new Date()
         }
       });
-      res.status(200).json({ message: "iniciado" });
+      res.status(200).json({ message: "cerrado" });
     } catch (error) {
       console.error(error);
       res.status(500).json({ error });
