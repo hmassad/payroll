@@ -5,11 +5,11 @@ type Props = {
   children: ReactNode;
 };
 
-const Layout: React.FC<Props> = (props) => (
+const Layout: React.FC<Props> = props => (
   <div>
     <Header />
-    <div className="layout">{props.children}</div>
-    <style jsx global>{`
+    <div className="flex flex-nowrap">{props.children}</div>
+    {/* <style jsx global>{`
       html {
         box-sizing: border-box;
       }
@@ -43,7 +43,7 @@ const Layout: React.FC<Props> = (props) => (
       .layout {
         padding: 0 2rem;
       }
-    `}</style>
+    `}</style> */}
   </div>
 );
 

@@ -8,7 +8,22 @@ export default NextAuth({
   providers: [
     GitHubProvider({
       clientId: process.env.GITHUB_ID,
-      clientSecret: process.env.GITHUB_SECRET
+      clientSecret: process.env.GITHUB_SECRET,
+      profile(profile) {
+        return {
+          id: profile.id.toString(),
+          name: profile.name || profile.login,
+          username: profile.login,
+          email: profile.email,
+          image: profile.avatar_url
+        };
+      }
     })
-  ]
+  ],
+  callbacks: {
+    session: ({ session, user }) => ({
+      ...session,
+      user: { ...session.user, id: user.id, username: user.username }
+    })
+  }
 });
