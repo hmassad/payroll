@@ -37,7 +37,7 @@ const Index = ({ rounds }) => {
     <Layout>
       <div>
         <h1 className="text-3xl font-bold underline mb-5">Public Feed</h1>
-        <main>
+        <main className="flex flex-wrap gap-5">
           {rounds.map(round => (
             <div key={round.id} className="card mb-3">
               <ul>

@@ -2,5 +2,5 @@ node_modules/
 .next/
 .DS_STORE
 .idea
-.env.local
 .env
+.env.local

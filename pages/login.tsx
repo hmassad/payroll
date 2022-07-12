@@ -46,18 +46,6 @@ const Login = () => {
           </div>
           <div className="p-5">
             <div className="grid grid-cols-3 gap-1">
-              <button
-                type="button"
-                className="transition duration-200 border border-gray-200 text-gray-500 w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-normal text-center inline-block"
-              >
-                MailUp
-              </button>
-              <button
-                type="button"
-                className="transition duration-200 border border-gray-200 text-gray-500 w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-normal text-center inline-block"
-              >
-                Google
-              </button>
               <Button
                 onClick={() => signIn("github")}
                 type="button"
