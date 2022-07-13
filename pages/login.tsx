@@ -1,6 +1,6 @@
-import Button from "../components/Button";
+import Button from "../components/UI/Button";
 import { signIn } from "next-auth/react";
-import Layout from "../components/Layout";
+import Layout from "../components/Layout/Layout";
 
 const Login = () => {
   return (

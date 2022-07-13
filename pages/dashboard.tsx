@@ -1,6 +1,7 @@
 import prisma from "../lib/prisma";
-import Layout from "../components/Layout";
-import Button from "../components/Button";
+import Layout from "../components/Layout/Layout";
+import Button from "../components/UI/Button";
+import Round from "../components/Round";
 import moment from "moment";
 
 const Index = ({ rounds }) => {
@@ -37,7 +38,12 @@ const Index = ({ rounds }) => {
     <Layout>
       <div>
         <h1 className="text-3xl font-bold underline mb-5">Public Feed</h1>
-        <main className="flex flex-wrap gap-5">
+        <div className="grid grid-cols-1 gap-4">
+          {rounds.map(round => (
+            <Round project={round.project} />
+          ))}
+        </div>
+        {/* <main className="flex flex-wrap gap-5">
           {rounds.map(round => (
             <div key={round.id} className="card mb-3">
               <ul>
@@ -74,7 +80,7 @@ const Index = ({ rounds }) => {
               )}
             </div>
           ))}
-        </main>
+        </main> */}
       </div>
     </Layout>
   );

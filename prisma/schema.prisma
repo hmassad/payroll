@@ -47,6 +47,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   rounds        Round[]
+  assignments   Assignment[]
 }
 
 model VerificationToken {
@@ -57,11 +58,29 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
+model Project {
+  id          Int       @id @default(autoincrement())
+  name        String
+  customer    String
+  rounds      Round[]
+  assignments Assignment[]
+}
+
 model Round {
   id         Int       @id @default(autoincrement())
   user       User      @relation(fields: [userId], references: [id])
   userId     Int
-  project    String
+  project    Project   @relation(fields: [projectId], references: [id])
+  projectId  Int
   startedAt  DateTime  @default(now())
   finishedAt DateTime?
+}
+
+model Assignment {
+  id         Int       @id @default(autoincrement())
+  project    Project   @relation(fields: [projectId], references: [id])
+  projectId  Int
+  user       User      @relation(fields: [userId], references: [id])
+  userId     Int
+  rate       Float
 }
