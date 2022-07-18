@@ -1,42 +1,74 @@
 import prisma from "../../lib/prisma";
+import Layout from "../../components/Layout/Layout";
+import RoundInfo from "../../components/RoundInfo";
 
-const SingleUser = ({ userRounds }) => {
+import moment from "moment";
+
+const SingleUser = ({ rounds }) => {
   return (
-    <div>
-      {userRounds.map(round => (
-        <div key={round.id}>
-          <ul>
-            <li>{round.user.name}</li>
-            <li>{round.project}</li>
-          </ul>
-        </div>
-      ))}
-    </div>
+    <Layout>
+      <div className="flex flex-wrap gap-5">
+        {rounds.map(round => (
+          <RoundInfo key={round.id} round={round} />
+        ))}
+      </div>
+    </Layout>
   );
 };
 
 export default SingleUser;
 
-export const getServerSideProps = async context => {
-  const id = context.params.id;
-  const userRounds = await prisma.round.findMany({
+export const getServerSideProps = async req => {
+  const { id } = req.query;
+  const user = await prisma.user.findUnique({
     where: {
-      userId: parseInt(id)
+      id: parseInt(id)
     },
-    select: {
-      id: true,
-      user: {
+    include: {
+      rounds: {
         select: {
-          name: true
+          id: true,
+          project: {
+            select: {
+              id: true,
+              name: true,
+              customer: true
+            }
+          },
+          contractor: {
+            select: {
+              id: true,
+              name: true
+            }
+          },
+          assignment: {
+            select: {
+              id: true,
+              rate: true
+            }
+          },
+          assignmentId: true,
+          userId: true,
+          startedAt: true,
+          finishedAt: true
         }
-      },
-      userId: true,
-      project: true
+      }
     }
   });
+  console.log(user.rounds);
+
   return {
     props: {
-      userRounds
+      rounds: user.rounds.map(r => ({
+        ...r,
+        startedAt: r.startedAt?.toISOString(),
+        finishedAt: r.finishedAt?.toISOString(),
+        duration:
+          moment(r.finishedAt) > moment(new Date(0)) &&
+          moment(r.finishedAt)
+            .diff(moment(r.startedAt), "hours", true)
+            .toFixed(1)
+      }))
     }
   };
 };

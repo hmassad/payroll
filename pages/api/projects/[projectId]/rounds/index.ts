@@ -11,10 +11,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         const newRound = await prisma.round.create({
           data: {
             startedAt: new Date(),
-            project: payload.project,
-            userId: payload.userId,
-            finishedAt: new Date(0)
+            projectId: payload.project.id,
+            userId: payload.contractorId,
+            finishedAt: new Date(0),
+            assignmentId: payload.assignmentId
           }
+          // data: {
+          //   startedAt: new Date(),
+          //   project: payload.project,
+          //   userId: payload.userId,
+          //   finishedAt: new Date(0)
+          // }
         });
         res.status(200).json({ message: "iniciado" });
       } catch (error) {

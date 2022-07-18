@@ -7,7 +7,7 @@ const Home = () => {
   const session = useRequireAuth();
   if (!session) return <div>Cargando...</div>;
   return (
-    <Layout>
+    <Layout userId={session?.user?.id}>
       <div>
         <h1>{`Hola ${session?.user?.name}`}</h1>
 

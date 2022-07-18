@@ -8,6 +8,7 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["groupBy"]
 }
 
 model Account {
@@ -67,20 +68,23 @@ model Project {
 }
 
 model Round {
-  id         Int       @id @default(autoincrement())
-  user       User      @relation(fields: [userId], references: [id])
-  userId     Int
-  project    Project   @relation(fields: [projectId], references: [id])
-  projectId  Int
-  startedAt  DateTime  @default(now())
-  finishedAt DateTime?
+  id            Int        @id @default(autoincrement())
+  contractor    User       @relation(fields: [userId], references: [id])
+  userId        Int
+  project       Project    @relation(fields: [projectId], references: [id])
+  projectId     Int
+  assignment    Assignment @relation(fields: [assignmentId], references: [id])
+  assignmentId  Int
+  startedAt     DateTime   @default(now())
+  finishedAt    DateTime
 }
 
 model Assignment {
   id         Int       @id @default(autoincrement())
   project    Project   @relation(fields: [projectId], references: [id])
   projectId  Int
-  user       User      @relation(fields: [userId], references: [id])
+  contractor User      @relation(fields: [userId], references: [id])
   userId     Int
   rate       Float
+  rounds     Round[]
 }

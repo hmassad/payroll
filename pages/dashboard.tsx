@@ -1,7 +1,7 @@
 import prisma from "../lib/prisma";
 import Layout from "../components/Layout/Layout";
 import Button from "../components/UI/Button";
-import Round from "../components/Round";
+import RoundInfo from "../components/RoundInfo";
 import moment from "moment";
 
 const Index = ({ rounds }) => {
@@ -36,11 +36,19 @@ const Index = ({ rounds }) => {
   };
   return (
     <Layout>
-      <div>
-        <h1 className="text-3xl font-bold underline mb-5">Public Feed</h1>
-        <div className="grid grid-cols-1 gap-4">
+      <div className="flex flex-wrap gap-5">
+        <div className="flex flex-col gap-5">
           {rounds.map(round => (
-            <Round project={round.project} />
+            <RoundInfo
+              key={round.id}
+              project={round.project.name}
+              contractor={round.contractor.name}
+              rate={round.assignment.rate}
+              customer={round.project.customer}
+              startedAt={round.startedAt}
+              finishedAt={round.finishedAt}
+              name={round.contractor.name}
+            />
           ))}
         </div>
         {/* <main className="flex flex-wrap gap-5">
@@ -89,24 +97,43 @@ const Index = ({ rounds }) => {
 export default Index;
 
 export const getServerSideProps = async () => {
-  const rounds = await prisma.round.findMany({
-    select: {
-      id: true,
-      user: {
+  const user = await prisma.user.findUnique({
+    where: {
+      id: 1
+    },
+    include: {
+      rounds: {
         select: {
-          name: true
+          project: {
+            select: {
+              name: true,
+              customer: true
+            }
+          },
+          contractor: {
+            select: {
+              id: true,
+              name: true
+            }
+          },
+          assignment: {
+            select: {
+              rate: true
+            }
+          },
+          assignmentId: true,
+          userId: true,
+          startedAt: true,
+          finishedAt: true
         }
-      },
-      userId: true,
-      project: true,
-      startedAt: true,
-      finishedAt: true
+      }
     }
   });
+  console.log(user.rounds);
 
   return {
     props: {
-      rounds: rounds.map(r => ({
+      rounds: user.rounds.map(r => ({
         ...r,
         startedAt: r.startedAt?.toISOString(),
         finishedAt: r.finishedAt?.toISOString()
