@@ -1,86 +1,63 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-datasource db {
-  provider          = "postgresql"
-  url               = env("DATABASE_URL")
-}
-
 generator client {
   provider = "prisma-client-js"
 }
 
-model Account {
-  id                Int     @id @default(autoincrement())
-  userId            Int
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String? @db.Text
-  session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
-model Session {
-  id           Int      @id @default(autoincrement())
-  sessionToken String   @unique
-  userId       Int
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+enum Role {
+  ADMIN
+  USER
+}
+
+enum Period {
+  HOURLY
+  MONTHLY
 }
 
 model User {
-  id            Int       @id @default(autoincrement())
-  name          String?
-  username      String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-  rounds        Round[]
-  assignments   Assignment[]
+  id         String     @id @default(uuid()) @map("user_id")
+  email      String     @unique
+  username   String?
+  created_at DateTime?  @default(now())
+  updated_at DateTime?  @updatedAt
+  Contract   Contract[]
+  role       Role       @default(USER)
 }
 
-model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
-
-  @@unique([identifier, token])
+model Contract {
+  id         String     @id @default(uuid()) @map("contractor_id")
+  name       String
+  period     Period
+  created_at DateTime   @default(now())
+  updated_at DateTime   @updatedAt
+  user       User       @relation(fields: [user_id], references: [id])
+  user_id    String
+  Projects   Projects[]
 }
 
-model Project {
-  id          Int       @id @default(autoincrement())
+model Projects {
+  id          String   @id @default(uuid()) @map("project_id")
   name        String
-  customer    String
-  rounds      Round[]
-  assignments Assignment[]
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  Contract    Contract @relation(fields: [contract_id], references: [id])
+  contract_id String
 }
 
-model Round {
-  id         Int       @id @default(autoincrement())
-  user       User      @relation(fields: [userId], references: [id])
-  userId     Int
-  project    Project   @relation(fields: [projectId], references: [id])
-  projectId  Int
-  startedAt  DateTime  @default(now())
-  finishedAt DateTime?
+model Ledger {
+  id           String   @id @default(uuid()) @map("ledger_id")
+  title        String
+  description  String
+  hours        Int
+  total        Int
+  hourly_rate  Int
+  monthly_rate Int
+  period_start DateTime
+  period_end   DateTime
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
 }
 
-model Assignment {
-  id         Int       @id @default(autoincrement())
-  project    Project   @relation(fields: [projectId], references: [id])
-  projectId  Int
-  user       User      @relation(fields: [userId], references: [id])
-  userId     Int
-  rate       Float
-}

@@ -1,20 +1,20 @@
-import Layout from "../components/Layout/Layout";
-import { signOut } from "next-auth/react";
-import Button from "../components/UI/Button";
-import useRequireAuth from "../lib/useRequireAuth";
+import type { NextPage } from 'next';
+import { IndexPage } from '../src/screens';
+// import { createPrismaClient } from '../db';
 
-const Home = () => {
-  const session = useRequireAuth();
-  if (!session) return <div>Cargando...</div>;
-  return (
-    <Layout>
-      <div>
-        <h1>{`Hola ${session?.user?.name}`}</h1>
-
-        <Button onClick={() => signOut()}>Sign Out</Button>
-      </div>
-    </Layout>
-  );
+const Home: NextPage = () => {
+  return <IndexPage />;
 };
+
+// export async function getServerSideProps() {
+//   const prisma = createPrismaClient();
+//   const users = await prisma.user.findMany();
+
+//   return {
+//     props: {
+//       initialUser: JSON.parse(JSON.stringify(users))
+//     }
+//   };
+// }
 
 export default Home;
