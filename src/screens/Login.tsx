@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { FLAME_DOMAIN } from '../components/Register';
 
 import { useSession } from '../../src/hooks';
-import routes from '../../src/routes';
+import { routes } from '../../src/routes';
 import { LoginForm } from '../components/Login';
 
 export const Login = () => {

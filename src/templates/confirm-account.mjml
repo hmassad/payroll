@@ -1,0 +1,48 @@
+<mjml>
+  <mj-head>
+    <mj-title>[Flame Factory - Payroll] Confirm account</mj-title>
+    <mj-font name="Roboto" href="https://fonts.googleapis.com/css?family=Roboto:300,500"></mj-font>
+    <mj-font name="Outfit" href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;400;700;900&display=swap" />
+    <mj-attributes>
+      <mj-class name='bg-v-gray' background-color="#364053" />
+      <mj-class name="bg-v-blue" background-color="#3B6CCC" />
+      <mj-class name='bg-v-white' background-color="#ffffff" />
+      <mj-all font-family="Outfit,Roboto,Helvetica" />
+    </mj-attributes>
+  </mj-head>
+  <mj-body>
+    
+    <mj-hero mode="fluid-height" background-width="600px" background-height="139px" mj-class="bg-v-gray" />
+    <mj-section mj-class="bg-v-gray" >
+        <mj-column>
+        <!-- <mj-image align="left" width="160px" src="" /> -->
+        </mj-column>
+    </mj-section>
+
+    
+    <mj-section padding-top="100px" mj-class="bg-v-white" >
+      <mj-column>
+        <mj-text font-size="60px" font-weight="bold" mj-class="v-gray">Thank you!</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section mj-class="bg-v-white">
+      <mj-column>
+        <mj-text font-size="25px" >Please, confirm your sign up.</mj-text>
+        <mj-text font-size="18px" padding-top="20px">
+          Thank you for signing up to Payroll. Click the button below to activate your account
+        </mj-text>
+        <mj-text padding-top="20px" font-size="18px">Thank you,</mj-text>
+        <mj-text font-weight="bold" font-size="18px" padding-top="20px">Best, Flame Factory team</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section mj-class="bg-v-white">
+      <mj-column>
+        <mj-button mj-class="bg-v-blue" font-size="20px" href="{{ .ConfirmationURL }}">
+          Activate account
+        </mj-button>
+      </mj-column>
+    </mj-section>
+
+
+  </mj-body>
+</mjml>

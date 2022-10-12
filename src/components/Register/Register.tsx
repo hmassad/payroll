@@ -4,15 +4,18 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { createSupabaseClient, PrismaUser, SupabaseClient } from '../../../db';
 import { Role } from '@prisma/client';
-
-const factoryImg = '/assets/png/factory.png'
+import { useRouter } from 'next/router';
+import { routes } from '../../routes';
+const factoryImg = '/assets/png/factory.png';
 
 export const FLAME_DOMAIN = '@flamefactory.io';
+
+const { CONFIRM } = routes;
 
 export const Register = (): JSX.Element => {
   const supabase: SupabaseClient = createSupabaseClient();
   const [error, setError] = useState<null | string>(null);
-
+  const router = useRouter();
   interface RegisterValues {
     user: string;
     password: string;
@@ -32,19 +35,18 @@ export const Register = (): JSX.Element => {
         },
         {
           data: {
-            role: Role.USER,
+            role: Role.USER
           }
         }
       );
       if (error) return setError(error.message);
-      // DB handler
-    //   if (user) return await saveUser(payload);
+      if (user) return router.push(CONFIRM);
     }
   });
 
   return (
     <div className="shadow-md p-6">
-      <div className='flex justify-center mb-10'>
+      <div className="flex justify-center mb-10">
         <Image src={factoryImg} height={100} width={100} loading="lazy" />
       </div>
 
@@ -76,8 +78,8 @@ export const Register = (): JSX.Element => {
         </button>
       </form>
       {/*  Already registered button to /login */}
-      <div className='my-4'>
-        <Link href='/login'>
+      <div className="my-4">
+        <Link href="/login">
           <a className="text-blue-500">Already registered?</a>
         </Link>
       </div>

@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { Register, FLAME_DOMAIN } from '../components/Register';
 
 import { useSession } from '../../src/hooks';
-import routes from '../../src/routes';
+import { routes } from '../../src/routes';
 
 export const IndexPage = () => {
   const { user, isLoading } = useSession();
