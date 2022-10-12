@@ -1,4 +1,4 @@
-import { getUser, withPageAuth } from '@supabase/auth-helpers-nextjs';
+import {  withPageAuth } from '@supabase/auth-helpers-nextjs';
 import { GetServerSideProps } from 'next';
 import { Dashboard } from '../src/screens';
 import { createSupabaseClient, SupabaseClient } from '../db';
@@ -13,7 +13,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth({
   authRequired: true,
   redirectTo: '/',
   async getServerSideProps(ctx) {
-    // const { user, accessToken } = await getUser(ctx);
 
     const ledger = await supabase.from('ledger').select('*');
 
