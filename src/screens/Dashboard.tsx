@@ -1,9 +1,9 @@
 import { Role } from '@prisma/client';
 import { NextRouter, useRouter } from 'next/router';
-import { useEffect  } from 'react';
+import { useEffect } from 'react';
 
 import { hasRole, useSession } from '../hooks';
-import routes from '../routes';
+import { routes } from '../routes';
 
 export const Dashboard = () => {
   const { user } = useSession();
@@ -16,10 +16,10 @@ export const Dashboard = () => {
     }
   }, [user]);
 
-  const canSeeAdminDashboard = hasRole(user, Role.ADMIN) 
+  const canSeeAdminDashboard = hasRole(user, Role.ADMIN);
   const isContractor = hasRole(user, Role.USER);
 
-  // Dashboard component 
+  // Dashboard component
   // We will switch here between the admin and contractor dashboard
   // Example
   // if (canSeeAdminDashboard) {
