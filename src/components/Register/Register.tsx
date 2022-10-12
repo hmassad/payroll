@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { createSupabaseClient, PrismaUser, SupabaseClient } from '../../../db';
-// import { saveUser } from '../../services';
+import { Role } from '@prisma/client';
 
 const factoryImg = '/assets/png/factory.png'
 
@@ -24,15 +24,6 @@ export const Register = (): JSX.Element => {
       password: ''
     },
     onSubmit: async (values: RegisterValues) => {
-    //   const payload: PrismaUser = {
-    //     // We can find a better way of doing this
-    //     id: Math.floor(Math.random() * 1000000),
-    //     email: values.user + FLAME_DOMAIN,
-    //     username: values.user,
-    //     // role: Role.USER,
-    //     // created_at: new Date(),
-    //     // updated_at: new Date()
-    //   };
       // Auth handler
       const { error, user } = await supabase.auth.signUp(
         {
@@ -41,7 +32,7 @@ export const Register = (): JSX.Element => {
         },
         {
           data: {
-            // role: Role.USER,
+            role: Role.USER,
           }
         }
       );

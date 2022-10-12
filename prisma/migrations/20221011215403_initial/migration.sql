@@ -11,7 +11,7 @@ CREATE TABLE "User" (
     "username" TEXT,
     "created_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3),
-    "role" "Role" NOT NULL DEFAULT E'USER',
+    "role" "Role" NOT NULL DEFAULT 'USER',
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("user_id")
 );
@@ -23,7 +23,7 @@ CREATE TABLE "Contract" (
     "period" "Period" NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
-    "user_id" TEXT NOT NULL,
+    "userId" TEXT,
 
     CONSTRAINT "Contract_pkey" PRIMARY KEY ("contractor_id")
 );
@@ -60,7 +60,7 @@ CREATE TABLE "Ledger" (
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- AddForeignKey
-ALTER TABLE "Contract" ADD CONSTRAINT "Contract_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("user_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Contract" ADD CONSTRAINT "Contract_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("user_id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Projects" ADD CONSTRAINT "Projects_contract_id_fkey" FOREIGN KEY ("contract_id") REFERENCES "Contract"("contractor_id") ON DELETE RESTRICT ON UPDATE CASCADE;
