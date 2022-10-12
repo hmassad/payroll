@@ -1,0 +1,9 @@
+node_modules/
+.next/
+.DS_STORE
+.idea
+.env
+
+# Supabase
+**/supabase/.branches
+**/supabase/.temp

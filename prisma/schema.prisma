@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum Period {
+  HOURLY
+  MONTHLY
+}
+
+model User {
+  id         String     @id @default(uuid()) @map("user_id")
+  email      String     @unique
+  username   String?
+  created_at DateTime?  @default(now())
+  updated_at DateTime?  @updatedAt
+  Contract   Contract[]
+  role       Role       @default(USER)
+}
+
+model Contract {
+  id         String   @id @default(uuid()) @map("contractor_id")
+  name       String
+  period     Period
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  Projects Projects[]
+  User     User?      @relation(fields: [userId], references: [id])
+  userId   String?
+}
+
+model Projects {
+  id          String   @id @default(uuid()) @map("project_id")
+  name        String
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  Contract    Contract @relation(fields: [contract_id], references: [id])
+  contract_id String
+}
+
+model Ledger {
+  id           String   @id @default(uuid()) @map("ledger_id")
+  title        String
+  description  String
+  hours        Int
+  total        Int
+  hourly_rate  Int
+  monthly_rate Int
+  period_start DateTime
+  period_end   DateTime
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+}
